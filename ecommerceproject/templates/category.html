@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   {% if category %}
+        {{category.description|truncatewords:155}}
+   {% else %}
+         welcome to electronic store where you can buy different items....
+   {% endif %}
+{% endblock %}
+{% block title %}
+   {% if category %}
+        {{category.name}} - electronica store
+   {% else %}
+         See Our New Collections -electronica store
+   {% endif %}
+{% endblock %}
+
+{% block content %}
+     {% if category %}
+     <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+          <p><a href="{% url 'shop:allProdCat' %}">Our Product Collections</a></p>
+            </div>
+        </div>
+     </div>
+     {% endif %}
+<div class="mx-auto">
+    {% if category %}
+       <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+
+</div>
+     <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+     {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/banner4.png' %}" alt="our Products" width="1000px;">
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title">Our Product Collections</h1>
+  <p class="text-justify">You can group your products into collections to make it easier for customers to find them by category.After you create a collection, it can be shown on your online store as a webpage with a gallery of the products that are in the collection. Your customers can then click a product image on the collection page to visit a specific product's page. </p>
+</div>
+    {% endif %}
+<div class="container">
+  <div class="row mx_auto">
+    {% for product in products.object_list %}
+    <div class="my_bottom_margin col-9 col-sm-12  col-md-4 col-lg-4">
+      <div class="card text-center" style="min-width:18rem;">
+         <a href="{{product.get_url}}"><img class="card_img_top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+        <div class="card-body">
+           <h4>{{product.name}}</h4>
+           <p>{{product.price}}</p>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1  %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+               <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
